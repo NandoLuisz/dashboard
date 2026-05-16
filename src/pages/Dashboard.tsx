@@ -8,9 +8,9 @@ import {
   WalletCards,
   CircleX,
   MessageSquareQuote,
-} from "lucide-react"
+} from "lucide-react";
 
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -19,14 +19,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
 import {
   Table,
@@ -35,17 +35,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { Calendar as CalenderUI } from "@/components/ui/calendar"
+import { Calendar as CalenderUI } from "@/components/ui/calendar";
 
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
-import { useEffect, useState } from "react"
-import { Skeleton } from "@/components/ui/skeleton"
-import Review from "./components/Review"
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import Review from "./components/Review";
 
-export const description = "A line chart"
+export const description = "A line chart";
 
 const chartData = [
   { period: "Jan", pedidos: 420 },
@@ -54,14 +54,14 @@ const chartData = [
   { period: "Abr", pedidos: 470 },
   { period: "Mai", pedidos: 560 },
   { period: "Jun", pedidos: 610 },
-]
+];
 
 const chartConfig = {
   pedidos: {
     label: "Pedidos",
     color: "var(--chart-1)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 const menuItems = [
   {
@@ -88,29 +88,29 @@ const menuItems = [
     image:
       "data:image/jpeg;base64,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du0UpU0dnJULuDaMKjMD09coYm1rE5LWKyVCrFRSZS4jZ9WdSU4JZ35aWS5cbd2d73MeF2ngg71GptnOIaqrWN1plyyjQ2vu08YjUp3bazvc2q4TGOMYRkrbii1lm7WfArhkZl0ssjyTNTJjqG3+82SNJvI0K7fnSdolfVZ1/iL+SV//ACD7qnLPDfCeL21067PVnSZIKcQBAEAQBAEAQBAEAQBAEAQBAEAQCu8YOyauKwFajRF6hCsq3AzFHD5bnQE2trNKkN+NiVg8QsPWVRq9j89UqjKzI9KojLoytYEEGxUi+h0OhlfPBz4WPV0PtFhl8Sku5fySuEps5tYKf1mRe7eTOTwdXkTV9osDLWTXcyVTg9iiLqlNvCtQPszzX7pV5eR0/HMA/wDst3S/g+/8uYwWIpeYqUjp5PH3Wr/j5G341gH/ANq8JfwYamw8UN9I/vU/6pj7rV5Gy2zgP9q+f8GFtmVxpyZ8Lp/VH3WryM/jOA/2r5/weqWxcU3RoOfV/OPulbl5GPxvAL/tXhL+D7V4P4sKWNGwF73emDpv0LXPlvmfulXka/juA/2fKX8EdicMygZio03Ai/qF7GdFhKvIj1Nv4K9t9+DIyqvePvvOscJPqK6rt7C/tUn3L+TufFNsSvhcG3LqUarUNQIekq5FUZuw829vC9t0mUqbgrM89j8WsTU3oqySsXadSCIAgCAIAgCAIAgCAIAgCAIAgCAIAgFA42ODFOth2xVNPj6QDEqNXpjRwwG/KpJB36EbjAOO4dDcC46v9wRpAL9wd4K1ay3DLYg2OYg+dhpp/CAbmN4H4gEjMhNs2rMQb7iTl33voDfS8AhcXsTEp1p5MPbuue8wCLrYete1x+9AJvCcCsfUXMrUrW0Ac3PgMu8ntgEdtvgpiqCZ6lSlbdZWN7jf9G2/S/aD4wCnYh2WzZ7b7EGx8fb7JmwOocSvBmk9M4+qmY5ytDN0QF6VRRuJzXUHqy6b5gHXIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgEbi+D+CqnNVwtB2+s1KmW9ZF4Bjp8G8GoslEJ6DOn+UiAYqvBXBt0lqH+/xH+pANV+AmzjvpVD/AIjFf6kAwPxcbKO+g5/xGK/1IBmocAtmp0aLj+/xP31IBm/5K2baxwqMP1yz/wCcmAbGF4LbOpnMmCwytrzhSp5tdTzrXgEuqgCwFh2CAfYAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAf//Z",
   },
-]
+];
 
 export default function Dashboard() {
-  const [loading, setLoading] = useState(true)
-  const [showCalender, setShowCalender] = useState<boolean>(false)
-  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [loading, setLoading] = useState(true);
+  const [showCalender, setShowCalender] = useState<boolean>(false);
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [dateToFilter, setDatetofilter] = useState<string>(
-    format(new Date(), "dd 'de' MMM, yyyy", { locale: ptBR })
-  )
+    format(new Date(), "dd 'de' MMM, yyyy", { locale: ptBR }),
+  );
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1500)
-  }, [])
+    setTimeout(() => setLoading(false), 1500);
+  }, []);
 
   useEffect(() => {
-  if (date) {
-    const formattedDate = format(date, "dd 'de' MMM, yyyy", { locale: ptBR })
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDatetofilter(formattedDate)
-    
-    setShowCalender(false)
-  }
-}, [date])
+    if (date) {
+      const formattedDate = format(date, "dd 'de' MMM, yyyy", { locale: ptBR });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDatetofilter(formattedDate);
+
+      setShowCalender(false);
+    }
+  }, [date]);
 
   return (
     <div className="w-full h-full relative">
@@ -128,11 +128,11 @@ export default function Dashboard() {
         <span className="text-sm font-semibold text-amber-950">
           {dateToFilter}
         </span>
-        <ChevronDown 
-          className="size-4 cursor-pointer" 
+        <ChevronDown
+          className="size-4 cursor-pointer"
           onClick={() => setShowCalender(!showCalender)}
         />
-      </div>  
+      </div>
       <div className="py-4 flex gap-4">
         {!loading ? (
           <div className="w-68 bg-white px-5 py-5 rounded-4xl">
@@ -210,8 +210,16 @@ export default function Dashboard() {
                 <ChartContainer config={chartConfig} className="w-full h-full">
                   <LineChart data={chartData} margin={{ left: 12, right: 12 }}>
                     <CartesianGrid vertical={false} />
-                    <XAxis dataKey="period" tickLine={false} axisLine={false} tickMargin={6} />
-                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                    <XAxis
+                      dataKey="period"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={6}
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent hideLabel />}
+                    />
                     <Line
                       dataKey="pedidos"
                       type="natural"
@@ -225,9 +233,12 @@ export default function Dashboard() {
 
               <CardFooter className="w-full mt-2 flex items-start justify-center gap-1 text-xs">
                 <div className="flex gap-2 font-medium text-green-600">
-                  Crescimento de 5.2% este mês <TrendingUp className="h-4 w-4" />
+                  Crescimento de 5.2% este mês{" "}
+                  <TrendingUp className="h-4 w-4" />
                 </div>
-                <div className="text-muted-foreground">Maior volume no período de jantar</div>
+                <div className="text-muted-foreground">
+                  Maior volume no período de jantar
+                </div>
               </CardFooter>
             </Card>
           )}
@@ -241,17 +252,17 @@ export default function Dashboard() {
               {loading ? (
                 <Skeleton className="w-45.5 h-45.5 bg-zinc-200 rounded-4xl" />
               ) : (
-                <Review quantity={5}/>
+                <Review quantity={5} />
               )}
               {loading ? (
                 <Skeleton className="w-45.5 h-45.5 bg-zinc-200 rounded-4xl" />
               ) : (
-                <Review quantity={5}/>
+                <Review quantity={5} />
               )}
               {loading ? (
                 <Skeleton className="w-45.5 h-45.5 bg-zinc-200 rounded-4xl" />
               ) : (
-                <Review quantity={3}/>
+                <Review quantity={3} />
               )}
             </div>
           </div>
@@ -260,7 +271,9 @@ export default function Dashboard() {
           {loading ? (
             <Skeleton className="h-6 w-80" />
           ) : (
-            <span className="font-semibold text-xl">Itens mais vendidos do cardápio - Jan</span>
+            <span className="font-semibold text-xl">
+              Itens mais vendidos do cardápio - Jan
+            </span>
           )}
 
           <Table>
@@ -298,7 +311,11 @@ export default function Dashboard() {
                 : menuItems.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell className="font-medium flex items-center gap-2">
-                        <img src={item.image} alt={item.menu} className="size-10 rounded-sm" />
+                        <img
+                          src={item.image}
+                          alt={item.menu}
+                          className="size-10 rounded-sm"
+                        />
                         {item.menu}
                       </TableCell>
 
@@ -306,7 +323,9 @@ export default function Dashboard() {
 
                       <TableCell>R$ {item.preco.toFixed(2)}</TableCell>
 
-                      <TableCell className="text-right">{item.quantidade}</TableCell>
+                      <TableCell className="text-right">
+                        {item.quantidade}
+                      </TableCell>
                     </TableRow>
                   ))}
             </TableBody>
@@ -314,5 +333,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

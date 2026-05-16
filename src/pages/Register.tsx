@@ -1,20 +1,24 @@
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import type { SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Toast } from "./ui/Toast"
-import { ListFilter, X } from "lucide-react"
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Toast } from "./ui/Toast";
+import { ListFilter, X } from "lucide-react";
 
-import data from "@/data.json"
-import { categories, types, type FoodResponse } from "@/model/foodModel"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { foodFormSchema, type FoodFormFields } from "@/model/schema/schemaFood"
+import data from "@/data.json";
+import { categories, types, type FoodResponse } from "@/model/foodModel";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { foodFormSchema, type FoodFormFields } from "@/model/schema/schemaFood";
 
-const inputBase = "outline-none rounded-3xl px-4 py-2 transition-colors"
-const inputError = "border-2 border-red-500 bg-red-50"
-const inputNormal = "bg-white"
+const inputBase = "outline-none rounded-3xl px-4 py-2 transition-colors";
+const inputError = "border-2 border-red-500 bg-red-50";
+const inputNormal = "bg-white";
 
 function ProductSkeleton() {
   return (
@@ -38,7 +42,7 @@ function ProductSkeleton() {
         </div>
       ))}
     </>
-  )
+  );
 }
 
 export default function Register() {
@@ -56,27 +60,28 @@ export default function Register() {
       price: 0,
       type: undefined,
     },
-  })
+  });
 
-  const [products, setProducts] = useState<FoodResponse[]>(data)
-  const [filter, setFilter] = useState("")
+  const [products, setProducts] = useState<FoodResponse[]>(data);
+  const [filter, setFilter] = useState("");
 
-  const [modalDetails, setModalDetails] = useState<boolean>(false)
-  const [productDetails, setProductDetails] = useState<FoodResponse | null>()
-  const [filterTypeValue, setFilterTypeValue] = useState<string>("")
+  const [modalDetails, setModalDetails] = useState<boolean>(false);
+  const [productDetails, setProductDetails] = useState<FoodResponse | null>();
+  const [filterTypeValue, setFilterTypeValue] = useState<string>("");
 
-  const [toastSucessfullyEdit, setToastSucessfullyEdit] = useState(false)
-  const [toastSucessfullyRegister, setToastSucessfullyRegister] = useState(false)
-  const [toastWarningRegister, setToastWarningRegister] = useState(false)
-  const [toastDeleteRegister, setToastDeleteRegister] = useState(false)
+  const [toastSucessfullyEdit, setToastSucessfullyEdit] = useState(false);
+  const [toastSucessfullyRegister, setToastSucessfullyRegister] =
+    useState(false);
+  const [toastWarningRegister, setToastWarningRegister] = useState(false);
+  const [toastDeleteRegister, setToastDeleteRegister] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   const onSubmit: SubmitHandler<FoodFormFields> = async (formData) => {
-    console.log(formData)
-    setToastSucessfullyRegister(true)
-    reset()
-  }
+    console.log(formData);
+    setToastSucessfullyRegister(true);
+    reset();
+  };
 
   useEffect(() => {
     if (
@@ -86,30 +91,39 @@ export default function Register() {
       toastDeleteRegister
     ) {
       const timer = setTimeout(() => {
-        setToastSucessfullyEdit(false)
-        setToastSucessfullyRegister(false)
-        setToastWarningRegister(false)
-        setToastDeleteRegister(false)
-      }, 5000)
+        setToastSucessfullyEdit(false);
+        setToastSucessfullyRegister(false);
+        setToastWarningRegister(false);
+        setToastDeleteRegister(false);
+      }, 5000);
 
-      return () => clearTimeout(timer)
+      return () => clearTimeout(timer);
     }
-  }, [toastSucessfullyEdit, toastSucessfullyRegister, toastWarningRegister, toastDeleteRegister])
+  }, [
+    toastSucessfullyEdit,
+    toastSucessfullyRegister,
+    toastWarningRegister,
+    toastDeleteRegister,
+  ]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500)
-    return () => clearTimeout(timer)
-  }, [])
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   function filterPopover(type: string) {
-    setProducts(data.filter((item) => item.type === type))
+    setProducts(data.filter((item) => item.type === type));
   }
 
   return (
     <main className="w-full h-full flex gap-5 relative">
       {toastSucessfullyRegister && <Toast text="Cadastro feito com sucesso!" />}
-      {toastWarningRegister && <Toast text="Preencha o formulário corretamente!" color="yellow" />}
-      {toastDeleteRegister && <Toast text="Cadastro deletado com sucesso!" color="red" />}
+      {toastWarningRegister && (
+        <Toast text="Preencha o formulário corretamente!" color="yellow" />
+      )}
+      {toastDeleteRegister && (
+        <Toast text="Cadastro deletado com sucesso!" color="red" />
+      )}
       {modalDetails && (
         <div className="absolute w-160 h-100 bg-white rounded-md mt-40 ml-50 px-2 py-2">
           <div className="w-full flex justify-end">
@@ -177,7 +191,7 @@ export default function Register() {
         </div>
       )}
       <form
-        className="w-[40%] h-[70vh] bg-amber-200 rounded-lg flex flex-col items-center gap-3 px-5 py-10"
+        className="w-[40%] h-[700px] bg-amber-200 rounded-lg flex flex-col items-center gap-3 px-5 py-10"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="w-full flex flex-col gap-1">
@@ -187,7 +201,9 @@ export default function Register() {
             {...register("title")}
             className={`${inputBase} ${errors.title ? inputError : inputNormal}`}
           />
-          {errors.title && <span className="text-sm text-red-600">{errors.title.message}</span>}
+          {errors.title && (
+            <span className="text-sm text-red-600">{errors.title.message}</span>
+          )}
         </div>
 
         <div className="w-full flex flex-col gap-1">
@@ -198,7 +214,9 @@ export default function Register() {
             className={`${inputBase} ${errors.description ? inputError : inputNormal}`}
           />
           {errors.description && (
-            <span className="text-sm text-red-600">{errors.description.message}</span>
+            <span className="text-sm text-red-600">
+              {errors.description.message}
+            </span>
           )}
         </div>
 
@@ -209,7 +227,9 @@ export default function Register() {
             {...register("image")}
             className={`${inputBase} ${errors.image ? inputError : inputNormal}`}
           />
-          {errors.image && <span className="text-sm text-red-600">{errors.image.message}</span>}
+          {errors.image && (
+            <span className="text-sm text-red-600">{errors.image.message}</span>
+          )}
         </div>
 
         <div className="w-full flex flex-col gap-1">
@@ -220,7 +240,9 @@ export default function Register() {
             {...register("price", { valueAsNumber: true })}
             className={`${inputBase} ${errors.price ? inputError : inputNormal}`}
           />
-          {errors.price && <span className="text-sm text-red-600">{errors.price.message}</span>}
+          {errors.price && (
+            <span className="text-sm text-red-600">{errors.price.message}</span>
+          )}
         </div>
 
         <div className="w-full flex flex-col items-start gap-2">
@@ -245,7 +267,7 @@ export default function Register() {
         <div className="w-full mt-4">
           <button
             type="submit"
-            className="w-full bg-orange-700 hover:bg-orange-800 transition-colors py-2 rounded-lg text-white font-bold"
+            className="w-full bg-orange-700 hover:bg-orange-800 transition-colors py-2 rounded-lg text-white font-bold cursor-pointer"
           >
             Cadastrar
           </button>
@@ -275,8 +297,8 @@ export default function Register() {
                     <li
                       key={option}
                       onClick={() => {
-                        filterPopover(option)
-                        setFilterTypeValue(option)
+                        filterPopover(option);
+                        setFilterTypeValue(option);
                       }}
                       className="cursor-pointer rounded px-2 py-1 hover:bg-zinc-100"
                     >
@@ -289,8 +311,8 @@ export default function Register() {
             <X
               className="size-4"
               onClick={() => {
-                setProducts(data)
-                setFilterTypeValue("Filtrar pelo tipo")
+                setProducts(data);
+                setFilterTypeValue("Filtrar pelo tipo");
               }}
             />
           </div>
@@ -303,7 +325,9 @@ export default function Register() {
               .filter(
                 (item) =>
                   item.title.toLowerCase().includes(filter.toLowerCase()) ||
-                  item.description.toLowerCase().includes(filter.toLowerCase()) ||
+                  item.description
+                    .toLowerCase()
+                    .includes(filter.toLowerCase()) ||
                   item.type.toLowerCase().includes(filter.toLowerCase()),
               )
               .map((item) => (
@@ -311,8 +335,8 @@ export default function Register() {
                   key={item.id}
                   className="flex items-center gap-4 bg-orange-400 px-4 py-3 rounded-xl cursor-pointer hover:bg-orange-500 transition-colors"
                   onClick={() => {
-                    setModalDetails(true)
-                    setProductDetails(item)
+                    setModalDetails(true);
+                    setProductDetails(item);
                   }}
                 >
                   <img
@@ -322,12 +346,20 @@ export default function Register() {
                   />
                   <div className="flex flex-1 items-center justify-between">
                     <div className="flex flex-col gap-1">
-                      <span className="font-semibold text-lg">{item.title}</span>
-                      <span className="text-sm text-zinc-700 line-clamp-1">{item.description}</span>
+                      <span className="font-semibold text-lg">
+                        {item.title}
+                      </span>
+                      <span className="text-sm text-zinc-700 line-clamp-1">
+                        {item.description}
+                      </span>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                      <span className="text-sm uppercase text-zinc-800">{item.type}</span>
-                      <span className="font-bold text-lg">R$ {item.price.toFixed(2)}</span>
+                      <span className="text-sm uppercase text-zinc-800">
+                        {item.type}
+                      </span>
+                      <span className="font-bold text-lg">
+                        R$ {item.price.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -336,5 +368,5 @@ export default function Register() {
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Outlet } from "react-router"
-import Sidebar from "./components/Sidebar"
-import Header from "./components/Header"
+import { Outlet } from "react-router";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
 
 export default function HomeLayout() {
   return (
-    <div className="w-full h-screen bg-zinc-100 flex px-5 py-5 font-pattern">
+    <div className="w-full min-h-screen bg-zinc-100 flex px-5 py-5 font-pattern">
       <Sidebar />
 
       <div className="flex-1 flex flex-col px-5">
@@ -12,5 +12,5 @@ export default function HomeLayout() {
         <Outlet />
       </div>
     </div>
-  )
+  );
 }
