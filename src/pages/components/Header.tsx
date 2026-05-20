@@ -2,9 +2,11 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 
 import { User, LogOut } from "lucide-react";
-import { Link, NavLink } from "react-router";
+import { NavLink } from "react-router";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
+  const { user } = useAuth();
   const [modalProfile, setModalProfile] = useState<boolean>(false);
   return (
     <div className="w-full h-[10vh] flex justify-between items-start relative">
@@ -43,13 +45,16 @@ export default function Header() {
         onClick={() => setModalProfile((prev) => !prev)}
       >
         <img
-          src="https://github.com/NandoLuisz.png"
+          src={
+            user?.profile ||
+            "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-portrait-176256935.jpg"
+          }
           alt="Foto de perfil do GitHub"
           className="w-12 h-12 rounded-full"
         />
         <div className="flex flex-col pr-4">
           <span className="text-sm">Bem-vindo</span>
-          <span className="font-semibold">Luis Fernando</span>
+          <span className="font-semibold">{user?.username}</span>
         </div>
       </div>
     </div>

@@ -8,7 +8,7 @@ export const menuFetch = axios.create({
 });
 
 menuFetch.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token-menu-nfl");
+  const token = localStorage.getItem("accessToken");
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -16,11 +16,3 @@ menuFetch.interceptors.request.use((config) => {
 
   return config;
 });
-
-export function saveToken(token: string) {
-  localStorage.setItem("token-menu-nfl", token);
-}
-
-export function deleteToken() {
-  localStorage.removeItem("token-menu-nfl");
-}

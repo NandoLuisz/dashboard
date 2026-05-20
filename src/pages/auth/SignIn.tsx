@@ -1,4 +1,4 @@
-import { menuFetch, saveToken } from "@/config/axios";
+import { menuFetch } from "@/config/axios";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -6,6 +6,7 @@ import { EyeOff, Eye } from "lucide-react";
 import { Link } from "react-router";
 import { z } from "zod";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const userLoginFormSchema = z.object({
   username: z.string().min(3).max(20),
@@ -15,6 +16,7 @@ const userLoginFormSchema = z.object({
 type LoginFormFields = z.infer<typeof userLoginFormSchema>;
 
 export default function SignIn() {
+  const { signIn } = useAuth();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const {
@@ -39,8 +41,8 @@ export default function SignIn() {
         JSON.stringify(userLogin),
       );
       if (response.status === 200) {
-        const token = response.data.accessToken;
-        saveToken(token);
+        const { username, profile, accessToken, expiresIn } = response.data;
+        signIn({ user: { username, profile }, accessToken, expiresIn });
         window.location.href = "/";
       }
     } catch (error: any) {
