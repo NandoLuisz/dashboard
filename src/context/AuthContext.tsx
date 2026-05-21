@@ -9,6 +9,8 @@ type AuthContextType = {
   user: User | null;
   accessToken: string | null;
   expiresIn: number | null;
+  authenticated: boolean;
+  loading: boolean;
   signIn: (data: any) => void;
   logout: () => void;
 };
@@ -19,40 +21,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [expiresIn, setExpiresIn] = useState<number | null>(null);
-
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedAccessToken = localStorage.getItem("accessToken");
-    const storedExpiresIn = localStorage.getItem("expiresIn");
+    const storedExpiresAt = localStorage.getItem("expiresAt");
 
-    if (storedUser && storedAccessToken) {
+    if (storedUser && storedAccessToken && storedExpiresAt) {
+      const isExpired = Date.now() > Number(storedExpiresAt);
+
+      if (isExpired) {
+        logout();
+        return;
+      }
+
       setUser(JSON.parse(storedUser));
       setAccessToken(storedAccessToken);
-      setExpiresIn(storedExpiresIn ? parseInt(storedExpiresIn) : null);
+      setExpiresIn(Number(storedExpiresAt));
     }
+    setLoading(false);
   }, []);
 
   function signIn(data: any) {
     const { user, accessToken, expiresIn } = data;
 
+    const expiresAt = Date.now() + expiresIn * 1000;
+
     setUser(user);
     setAccessToken(accessToken);
-    setExpiresIn(expiresIn);
+    setExpiresIn(expiresAt);
 
     localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("expiresIn", expiresIn.toString());
+    localStorage.setItem("expiresAt", expiresAt.toString());
   }
 
   function logout() {
     setUser(null);
     setAccessToken(null);
     setExpiresIn(null);
-    setAccessToken(null);
 
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("expiresIn");
+    localStorage.removeItem("expiresAt");
   }
 
   return (
@@ -61,6 +72,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         accessToken: accessToken,
         expiresIn: expiresIn,
+        authenticated: !!accessToken,
+        loading,
         signIn,
         logout,
       }}

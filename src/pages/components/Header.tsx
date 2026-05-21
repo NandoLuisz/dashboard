@@ -6,7 +6,7 @@ import { NavLink } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [modalProfile, setModalProfile] = useState<boolean>(false);
   return (
     <div className="w-full h-[10vh] flex justify-between items-start relative">
@@ -28,7 +28,7 @@ export default function Header() {
           <NavLink
             to="/sign-in"
             className="w-full flex gap-2 text-sm items-center hover:text-red-700 cursor-pointer"
-            onClick={() => localStorage.removeItem("token-menu-nfl")}
+            onClick={() => logout()}
           >
             <LogOut className="size-4" />
             <span>Log out</span>

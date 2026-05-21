@@ -16,8 +16,10 @@ const userLoginFormSchema = z.object({
 type LoginFormFields = z.infer<typeof userLoginFormSchema>;
 
 export default function SignIn() {
-  const { signIn } = useAuth();
+  const { signIn, authenticated } = useAuth();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
+  console.log(authenticated);
 
   const {
     register,
@@ -26,9 +28,6 @@ export default function SignIn() {
   } = useForm<LoginFormFields>();
 
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
-    const result = userLoginFormSchema.safeParse(data);
-    if (!result.success) return console.log("credenciais erradas");
-
     const { username, password } = data;
     const userLogin = {
       username,
