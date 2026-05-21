@@ -7,69 +7,108 @@ import {
   CupSoda,
   IceCream,
   Package,
-  Flame,
   SprayCan,
   Coffee,
   Banana,
-} from "lucide-react"
+  Hamburger,
+} from "lucide-react";
 
 export const categoriesStock = [
-  { name: "Carnes", value: "meat", icon: <Beef />, textColorHover: "hover:text-red-800" },
+  {
+    name: "Carnes",
+    value: "MEAT",
+    icon: <Beef />,
+    textColorHover: "hover:text-red-800",
+  },
 
-  { name: "Pães", value: "bread", icon: <Wheat />, textColorHover: "hover:text-amber-700" },
+  {
+    name: "Pães",
+    value: "BREAD",
+    icon: <Wheat />,
+    textColorHover: "hover:text-amber-700",
+  },
 
-  { name: "Laticínios", value: "dairy", icon: <Milk />, textColorHover: "hover:text-white" },
+  {
+    name: "Laticínios",
+    value: "DAIRY",
+    icon: <Milk />,
+    textColorHover: "hover:text-white",
+  },
 
   {
     name: "Vegetais",
-    value: "vegetable",
+    value: "VEGETABLE",
     icon: <LeafyGreen />,
     textColorHover: "hover:text-green-700",
   },
 
-  { name: "Frutas", value: "fruit", icon: <Banana />, textColorHover: "hover:text-yellow-500" },
+  {
+    name: "Frutas",
+    value: "FRUIT",
+    icon: <Banana />,
+    textColorHover: "hover:text-yellow-500",
+  },
 
   {
     name: "Molhos e Condimentos",
-    value: "sauces and condiments",
+    value: "SAUCES_AND_CONDIMENTS",
     icon: <Droplets />,
     textColorHover: "hover:text-red-300",
   },
 
-  { name: "Bebidas", value: "drink", icon: <CupSoda />, textColorHover: "hover:text-blue-800" },
+  {
+    name: "Bebidas",
+    value: "DRINK",
+    icon: <CupSoda />,
+    textColorHover: "hover:text-blue-800",
+  },
 
   {
     name: "Café e Sobremesas",
-    value: "sweet",
+    value: "SWEET",
     icon: <Coffee />,
     textColorHover: "hover:text-yellow-900",
   },
 
   {
     name: "Congelados",
-    value: "frozen",
+    value: "FROZEN",
     icon: <IceCream />,
     textColorHover: "hover:text-lime-600",
   },
 
   {
     name: "Embalagens",
-    value: "packaging",
+    value: "PACKAGING",
     icon: <Package />,
     textColorHover: "hover:text-red-900",
   },
 
   {
-    name: "Óleos e Fritura",
-    value: "frying",
-    icon: <Flame />,
+    name: "Fast Food",
+    value: "FAST_FOOD",
+    icon: <Hamburger />,
     textColorHover: "hover:text-orange-400",
   },
 
   {
     name: "Limpeza",
-    value: "cleaning",
+    value: "CLEANING",
     icon: <SprayCan />,
     textColorHover: "hover:text-purple-400",
   },
-]
+];
+
+export const categoriesStockMap = new Map<string, string>();
+categoriesStockMap.set("MEAT", "Carnes");
+categoriesStockMap.set("BREAD", "Pães");
+categoriesStockMap.set("DAIRY", "Laticínios");
+categoriesStockMap.set("VEGETABLE", "Vegetais");
+categoriesStockMap.set("FRUIT", "Frutas");
+categoriesStockMap.set("SAUCES_AND_CONDIMENTS", "Molhos e Condimentos");
+categoriesStockMap.set("DRINK", "Bebidas");
+categoriesStockMap.set("SWEET", "Café e Sobremesas");
+categoriesStockMap.set("FROZEN", "Congelados");
+categoriesStockMap.set("PACKAGING", "Embalagens");
+categoriesStockMap.set("FAST_FOOD", "Fast Food");
+categoriesStockMap.set("CLEANING", "Limpeza");
