@@ -11,6 +11,7 @@ import { stockSchema, type StockFormData } from "@/model/schema/schemaStock";
 
 import { type Stock } from "@/model/stockModel";
 import findAllProducts, { type Product } from "@/services/find-all-products";
+import updateProduct from "@/services/update-product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ChevronRight, ListFilter, X } from "lucide-react";
 
@@ -46,7 +47,7 @@ function StockTableSkeleton() {
 }
 
 export default function Stock() {
-  function onSubmit(data: StockFormData) {
+  async function onSubmit(data: StockFormData) {
     if (!stockProductDetails) return;
 
     setStockProducts((prev) =>
@@ -56,6 +57,15 @@ export default function Stock() {
           : item,
       ),
     );
+
+    console.log("Dados do formulário:", data);
+
+    try {
+      const response = await updateProduct(stockProductDetails.id!, data);
+      console.log("Resposta da atualização:", response.data.message);
+    } catch (error) {
+      console.error("Erro ao atualizar o produto:", error);
+    }
 
     setModalDetailsStockProduct(false);
   }
@@ -68,6 +78,9 @@ export default function Stock() {
     formState: { errors },
   } = useForm<StockFormData>({
     resolver: zodResolver(stockSchema),
+    defaultValues: {
+      stockControlled: false,
+    },
   });
 
   const [modalDetailsStockProduct, setModalDetailsStockProduct] =
@@ -124,7 +137,7 @@ export default function Stock() {
         onSubmit={handleSubmit(onSubmit)}
         className={`
           fixed top-0 right-0 h-full w-100 bg-white shadow-lg z-50
-          transform transition-transform duration-300 ease-in-out px-2 py-2
+          transform transition-transform duration-300 ease-in-out px-2 py-2 overflow-y-auto
           ${modalDetailsStockProduct ? "translate-x-0" : "translate-x-full"}
         `}
       >
@@ -140,63 +153,123 @@ export default function Stock() {
             alt={stockProductDetails?.name}
             className="w-full rounded"
           />
-          <div className="w-full flex flex-col gap-2">
-            <label className="text-[10px]">Nome</label>
-            <input
-              type="text"
-              {...register("name")}
-              className="border rounded-3xl px-3 py-2"
-            />
+          <div className="w-full flex flex-col gap-2 py-2">
+            <div className="flex flex-row items-center justify-between gap-1">
+              <label className="text-[10px]">Nome</label>
+              <input
+                type="text"
+                {...register("name")}
+                className="border rounded-3xl px-3 py-2"
+              />
+            </div>
             {errors.name && (
               <span className="text-red-500 text-xs">
                 {errors.name.message}
               </span>
             )}
-            <label className="text-[10px]">Quantidade</label>
-            <input
-              type="number"
-              {...register("stock", { valueAsNumber: true })}
-              className="border rounded-3xl px-3 py-2"
-            />
+            <div className="flex flex-row items-center justify-between gap-1">
+              <label className="text-[10px]">Quantidade</label>
+              <input
+                type="number"
+                {...register("stock", { valueAsNumber: true })}
+                className="border rounded-3xl px-3 py-2"
+              />
+            </div>
             {errors.stock && (
               <span className="text-red-500 text-xs">
                 {errors.stock.message}
               </span>
             )}
-            <label className="text-[10px]">Tipo</label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="w-50 justify-between">
-                  {stockProductDetails?.category
-                    ? categoriesStockMap.get(stockProductDetails.category)
-                    : "Selecione uma opção"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-50 p-2">
-                <ul className="flex flex-col gap-1">
-                  {categoriesStock.map((option) => (
-                    <div
-                      key={option.value}
-                      onClick={() => {
-                        setValue("category", option.value, {
-                          shouldValidate: true,
-                        });
-                        setStockProductDetails((prev) =>
-                          prev
-                            ? ({ ...prev, category: option.value } as Product)
-                            : prev,
-                        );
-                      }}
-                      className="cursor-pointer px-2 py-1 hover:bg-zinc-100"
-                    >
-                      {categoriesStockMap.get(option.value)}
-                    </div>
-                  ))}
-                </ul>
-              </PopoverContent>
-            </Popover>
+            <div className="flex flex-row items-center justify-between gap-1">
+              <label className="text-[10px]">Link da imagem</label>
+              <input
+                type="text"
+                {...register("image")}
+                className="border rounded-3xl px-3 py-2"
+              />
+            </div>
+            {errors.image && (
+              <span className="text-red-500 text-xs">
+                {errors.image.message}
+              </span>
+            )}
+            <div className="flex flex-row items-center justify-between gap-1">
+              <label className="text-[10px]">Preço</label>
+              <input
+                type="number"
+                {...register("price", { valueAsNumber: true })}
+                className="border rounded-3xl px-3 py-2"
+              />
+            </div>
+            {errors.price && (
+              <span className="text-red-500 text-xs">
+                {errors.price.message}
+              </span>
+            )}
+            <div className="flex flex-row items-center justify-between gap-1">
+              <label className="text-[10px]">Tipo</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-50 justify-between">
+                    {stockProductDetails?.category
+                      ? categoriesStockMap.get(stockProductDetails.category)
+                      : "Selecione uma opção"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-50 p-2">
+                  <ul className="flex flex-col gap-1">
+                    {categoriesStock.map((option) => (
+                      <div
+                        key={option.value}
+                        onClick={() => {
+                          setValue("category", option.value, {
+                            shouldValidate: true,
+                          });
+                          setStockProductDetails((prev) =>
+                            prev
+                              ? ({ ...prev, category: option.value } as Product)
+                              : prev,
+                          );
+                        }}
+                        className="cursor-pointer px-2 py-1 hover:bg-zinc-100"
+                      >
+                        {categoriesStockMap.get(option.value)}
+                      </div>
+                    ))}
+                  </ul>
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                {...register("stockControlled", {
+                  setValueAs: (value) => Boolean(value),
+                })}
+                className="
+                            h-4 w-4
+                            rounded
+                            border-gray-300
+                            text-blue-600
+                            focus:ring-2 focus:ring-blue-500
+                          "
+              />
+
+              <label
+                htmlFor="stockControlled"
+                className="text-sm cursor-pointer select-none"
+              >
+                Estoque controlado
+              </label>
+            </div>
+            {errors.stockControlled && (
+              <span className="text-red-500 text-xs">
+                {errors.stockControlled.message}
+              </span>
+            )}
           </div>
         </div>
+
         <Button type="submit" className="mt-4">
           Salvar alterações
         </Button>
