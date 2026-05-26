@@ -5,6 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { categoriesStock, categoriesStockMap } from "@/model/categoriesStock";
 import { stockSchema, type StockFormData } from "@/model/schema/schemaStock";
@@ -47,26 +48,15 @@ function StockTableSkeleton() {
 }
 
 export default function Stock() {
-  async function onSubmit(data: StockFormData) {
+  async function onSubmitUpdateProduct(data: StockFormData) {
     if (!stockProductDetails) return;
 
     setStockProducts((prev) =>
       prev.map((item) =>
-        item.id === stockProductDetails.id
-          ? ({ ...item, ...data } as Product)
-          : item,
+        item.id === stockProductDetails.id ? { ...item, ...data } : item,
       ),
     );
-
-    console.log("Dados do formulário:", data);
-
-    try {
-      const response = await updateProduct(stockProductDetails.id!, data);
-      console.log("Resposta da atualização:", response.data.message);
-    } catch (error) {
-      console.error("Erro ao atualizar o produto:", error);
-    }
-
+    await updateProduct(stockProductDetails.id!, data);
     setModalDetailsStockProduct(false);
   }
 
@@ -88,18 +78,16 @@ export default function Stock() {
   const [stockProductDetails, setStockProductDetails] =
     useState<Product | null>(null);
   const [stockProducts, setStockProducts] = useState<Product[]>([]);
+  const [allStockProducts, setAllStockProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filterText, setFilterText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const filteredStockProductWithStockControlled = stockProducts
-    .filter((item) => item.stockControlled)
-    .filter((item) => {
-      item.stockControlled = true;
-      return item;
-    });
+  const filteredStockProductWithStockControlled = stockProducts.filter(
+    (item) => item.stockControlled,
+  );
 
   const totalPages = Math.ceil(
     filteredStockProductWithStockControlled.length / ITEMS_PER_PAGE,
@@ -111,30 +99,56 @@ export default function Stock() {
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCurrentPage(1);
-  }, [filterText, selectedCategory]);
+    if (filterText.trim() === "") {
+      setStockProducts(allStockProducts);
+    } else {
+      const lowerCaseFilter = filterText.toLowerCase();
+      const filtered = allStockProducts.filter((item) =>
+        item.name.toLowerCase().includes(lowerCaseFilter),
+      );
+      setStockProducts(filtered);
+    }
+  }, [filterText, allStockProducts]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!selectedCategory) {
+      setStockProducts(allStockProducts);
+      console.log(selectedCategory);
+      return;
+    } else {
+      const castedCategory = categoriesStockMap.get(selectedCategory);
+      console.log(castedCategory);
+      const filtered = allStockProducts.filter(
+        (item) => item.category === selectedCategory,
+      );
+      setStockProducts(filtered);
+      console.log(selectedCategory);
+    }
+  }, [selectedCategory, allStockProducts]);
 
   useEffect(() => {
     const getProducts = async () => {
-      const products = await findAllProducts();
-      if (products) {
-        setStockProducts(products);
+      try {
+        setIsLoading(true);
+
+        const products = await findAllProducts();
+
+        if (products) {
+          setAllStockProducts(products);
+          setStockProducts(products);
+        }
+      } finally {
         setIsLoading(false);
       }
     };
+
     getProducts();
   }, []);
 
   return (
     <div className="w-full h-full flex flex-col">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmitUpdateProduct)}
         className={`
           fixed top-0 right-0 h-full w-100 bg-white shadow-lg z-50
           transform transition-transform duration-300 ease-in-out px-2 py-2 overflow-y-auto
@@ -243,9 +257,7 @@ export default function Stock() {
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                {...register("stockControlled", {
-                  setValueAs: (value) => Boolean(value),
-                })}
+                {...register("stockControlled")}
                 className="
                             h-4 w-4
                             rounded
@@ -278,17 +290,17 @@ export default function Stock() {
       <div className="w-full grid grid-cols-6 gap-4 mt-4">
         {categoriesStock.map((category) => (
           <div
-            key={category.name}
+            key={category.value}
             className={`
             bg-zinc-200 w-48 h-30 rounded flex flex-col items-center justify-center gap-2 cursor-pointer
-            ${category.textColorHover}
-            ${selectedCategory === category.name ? "ring-2 ring-zinc-500" : ""}
+            ${selectedCategory === category.value ? `ring-2 ring-${category.textColor} ${category.textColor}` : ""}
             `}
-            onClick={() =>
+            onClick={() => {
               setSelectedCategory((prev) =>
-                prev === category.name ? null : category.name,
-              )
-            }
+                prev === category.value ? null : category.value,
+              );
+              console.log(category.name);
+            }}
           >
             <span>{category.icon}</span>
 
